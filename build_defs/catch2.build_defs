@@ -1,0 +1,85 @@
+"""Rules to generate and run catch2 tests
+"""
+
+subinclude("///cc//build_defs:cc")
+
+def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cflags&copts=[],
+                   linker_flags:list&ldflags&linkopts=[], pkg_config_libs:list=[],
+                   pkg_config_cflags:list=[], deps:list=[], worker:str='', data:list|dict=[],
+                   visibility:list=[], flags:str='', labels:list&features&tags=[], flaky:bool|int=0,
+                   test_outputs:list=[], size:str=None, timeout:int=0,
+                   sandbox:bool=None, write_main:bool=False, linkstatic:bool=False, _c=False):
+    """Defines a C++ test using catch2.
+    Catch2 already provides its own main file. This is not currently user configurable for this rule but may be in the future.
+
+    Args:
+      name (str): Name of the rule
+      srcs (list): C or C++ source files to compile.
+      hdrs (list): Header files.
+      compiler_flags (list): Flags to pass to the compiler.
+      linker_flags (list): Flags to pass to the linker.
+      pkg_config_libs (list): Libraries to declare a dependency on using `pkg-config --libs`
+      pkg_config_cflags (list): Libraries to declare a dependency on using `pkg-config --cflags`
+      deps (list): Dependent rules.
+      worker (str): Reference to worker script, A persistent worker process that is used to set up the test. TODO, this is not yet implemented.
+      data (list): Runtime data files for this test.
+      visibility (list): Visibility declaration for this rule.
+      flags (str): Flags to apply to the test invocation.
+      labels (list): Labels to attach to this test.
+      flaky (bool | int): If true the test will be marked as flaky and automatically retried.
+      test_outputs (list): Extra test output files to generate from this test.
+      size (str): Test size (enormous, large, medium or small).
+      timeout (int): Length of time in seconds to allow the test to run for before killing it.
+      sandbox (bool): Sandbox the test on Linux to restrict access to namespaces such as network.
+      write_main (bool): Deprecated, has no effect. See `plz help testmain` for more information
+                         about how to define a default dependency for the test main.
+      linkstatic (bool): Only provided for Bazel compatibility. Has no actual effect since we always
+                         link roughly equivalently to their "mostly-static" mode.
+    """
+
+    # Rule to compile together sources for test.
+    testLib = cc_library(
+        name = tag(name, "lib"),
+        srcs = srcs,
+        hdrs = hdrs,
+        alwayslink = True, # Make sure to keep all outputs as otherwise the linker will throw away the tests.
+        deps = deps + 
+        [
+            "///plugins/catch2//:catch2",
+            "///plugins/catch2//:catch2main", # TODO Add user configurable main files.
+            "///plugins/catch2//:config" # For now, re-include config, even though it should be available, but there seems to be a please bug.
+        ],
+        pkg_config_libs=pkg_config_libs,
+        pkg_config_cflags=pkg_config_cflags,
+        compiler_flags=compiler_flags,
+        test_only=True,
+        _c=_c
+    )
+
+    # Rule to compile everything together into a binary.
+    binName = tag(name, "bin")
+    testBin = cc_binary(
+        name = binName,
+        deps = [testLib],
+        test_only=True
+    )
+
+    # The command to use to run the test. TODO implement support for code coverage among other things. 
+    test_cmd = join_path(package_name(), binName) + " -r junit::out=$RESULTS_FILE"
+
+    # Build rule that just runs the test.
+    return build_rule(
+        name=name,
+        data=[testBin] + data, # Include test binary output as data, as please uses the data list as its test inputs.
+        visibility=visibility,
+        test_cmd=test_cmd,
+        test=True,
+        needs_transitive_deps=True,
+        output_is_complete=True,
+        labels=labels,
+        flaky=flaky,
+        test_outputs=test_outputs,
+        test_timeout=timeout,
+        size=size,
+        test_sandbox=sandbox
+    )
