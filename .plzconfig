@@ -3,11 +3,11 @@
 version = >=17.8.7
 
 #[Parse]
-#preloadbuilddefs = build_defs//catch2.build_defs
+#preloadbuilddefs = plugins/BUILD
 #preloadsubinclude = ///cc//build_defs:cc
 
 [Plugin "cc"]
-Target = //plugins:cc
+Target = //build_defs:cc
 DefaultOptCppflags = --std=c++17 -O3 -pipe -DNDEBUG -Wall -Werror -fmax-errors=5
 
 [PluginDefinition]

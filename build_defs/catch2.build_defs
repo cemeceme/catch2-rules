@@ -45,9 +45,9 @@ def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cfl
         alwayslink = True, # Make sure to keep all outputs as otherwise the linker will throw away the tests.
         deps = deps + 
         [
-            "///plugins/catch2//:catch2",
-            "///plugins/catch2//:catch2main", # TODO Add user configurable main files.
-            "///plugins/catch2//:config" # For now, re-include config, even though it should be available, but there seems to be a please bug.
+            "///build_defs/catch2-repo//:catch2",
+            "///build_defs/catch2-repo//:catch2main", # TODO Add user configurable main files.
+            "///build_defs/catch2-repo//:config" # For now, re-include config, even though it should be available, but there seems to be a please bug.
         ],
         pkg_config_libs=pkg_config_libs,
         pkg_config_cflags=pkg_config_cflags,
