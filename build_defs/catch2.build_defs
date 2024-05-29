@@ -61,6 +61,7 @@ def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cfl
     testBin = cc_binary(
         name = binName,
         deps = [testLib],
+		linker_flags = linker_flags,
         test_only=True
     )
 
