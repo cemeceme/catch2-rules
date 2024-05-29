@@ -7,8 +7,11 @@ version = >=17.8.7
 #preloadsubinclude = ///cc//build_defs:cc
 
 [Plugin "cc"]
-Target = //build_defs:cc
+Target = //plugins:cc
 DefaultOptCppflags = --std=c++17 -O3 -pipe -DNDEBUG -Wall -Werror -fmax-errors=5
+
+[Plugin "cmake"]
+Target = //plugins:cmake
 
 [PluginDefinition]
 name = catch2
