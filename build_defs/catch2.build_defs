@@ -27,7 +27,7 @@ def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cfl
       flags (str): Flags to apply to the test invocation.
       labels (list): Labels to attach to this test.
       flaky (bool | int): If true the test will be marked as flaky and automatically retried.
-	  defines (list | dict): A list or dict of defines to use when compiling.
+      defines (list | dict): A list or dict of defines to use when compiling.
       test_outputs (list): Extra test output files to generate from this test.
       size (str): Test size (enormous, large, medium or small).
       timeout (int): Length of time in seconds to allow the test to run for before killing it.
@@ -43,7 +43,7 @@ def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cfl
         name = tag(name, "lib"),
         srcs = srcs,
         hdrs = hdrs,
-		defines = defines,
+        defines = defines,
         alwayslink = True, # Make sure to keep all outputs as otherwise the linker will throw away the tests.
         deps = deps + 
         [
@@ -63,8 +63,8 @@ def cc_catch2_test(name:str, srcs:list=[], hdrs:list=[], compiler_flags:list&cfl
     testBin = cc_binary(
         name = binName,
         deps = [testLib],
-		defines = defines,
-		linker_flags = linker_flags,
+        defines = defines,
+        linker_flags = linker_flags,
         test_only=True
     )
 
