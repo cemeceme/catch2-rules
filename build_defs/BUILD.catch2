@@ -69,7 +69,7 @@ cmake_configure_file(
 
 
 # Rule to build the bulk of catch2, without the main file.
-# Note that this only works if needs_transitive_deps is set top false for the rules within cc_library
+# Note that this only works if needs_transitive_deps is set to false for the rules within cc_library
 cc_library(
  name = "catch2",
  srcs = glob("src/**.cpp", "**/catch_main.cpp"),
@@ -79,7 +79,7 @@ cc_library(
  visibility = ["PUBLIC"]
 )
 
-# Seperate rule for main, as this is configurable for catch2.
+# Separate rule for main, as this is configurable for catch2.
 cc_library(
  name = "catch2main",
  srcs = ["src/catch2/internal/catch_main.cpp"],

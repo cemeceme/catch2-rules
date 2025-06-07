@@ -15,3 +15,11 @@ Target = //plugins:cmake
 
 [PluginDefinition]
 name = catch2
+
+
+[PluginConfig "version"]
+ConfigKey = version
+DefaultValue = v3.5.3
+Inherit = true
+Type = str
+Help = The version of catch2 to use.

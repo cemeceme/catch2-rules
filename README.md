@@ -45,3 +45,8 @@ sandbox           (bool)        : Sandbox the test on Linux to restrict access t
 write_main        (bool)        : Deprecated, has no effect. See `plz help testmain` for more information about how to define a default dependency for the test main.
 linkstatic        (bool)        : Only provided for Bazel compatibility. Has no actual effect since we always link roughly equivalently to their "mostly-static" mode.
 ```
+
+## Configuration
+
+### version
+The version of catch2 to use.

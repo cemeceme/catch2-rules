@@ -11,7 +11,7 @@ int workingAdd(int value1, int value2)
 	return(value1 + value2);
 }
 
-// A broken and wrong function that claims to add two numbers togehter, but substracts them instead.
+// A broken and wrong function that claims to add two numbers together, but substracts them instead.
 int notWorkingAdd(int value1, int value2)
 {
 	return(value1 - value2);
