@@ -9,7 +9,7 @@ filegroup(
 github_repo(
   name = "catch2-repo",
   repo = "catchorg/Catch2",
-  revision = CONFIG.CATCH2.VERSION,
+  revision = "v3.8.1",
   build_file = "BUILD.catch2",
   strip_build = True
 )
